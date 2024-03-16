@@ -1,0 +1,38 @@
+﻿@model DAL.Entities.Models.Product
+
+@{
+    ViewBag.Title = "Изменить";
+}
+
+<div class="container col-md-3 justify-content-center">
+    <h3 class="mb-4">Добавить товар</h3>
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input type="text" class="form-control" asp-for="Id" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Название</label>
+            <input type="text" class="form-control" asp-for="Name">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Описание</label>
+            <input type="text" class="form-control" asp-for="Description">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Цена</label>
+            <input type="text" class="form-control" asp-for="Price">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Базовый рейтинг</label>
+            <input type="text" class="form-control" asp-for="Rating">
+        </div>
+        <button type="submit" class="btn btn-primary">Применить</button>
+        <button type="submit" asp-controller="Products" asp-action="Delete" class="btn btn-danger">Удалить</button>
+    </form>
+</div>

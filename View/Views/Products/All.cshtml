@@ -1,0 +1,39 @@
+﻿@model IEnumerable<DAL.Entities.Models.Product>
+
+@{
+    ViewBag.Title = "Товары";
+}
+
+<div class="container">
+    <div class="justify-content-start mb-4">
+        <a class="btn btn-primary" href="@Url.Action("Add", "Products")">Добавить</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="fs-6 fw-bolder">Id</th>
+                <th class="fs-6 fw-bolder">Название</th>
+                <th class="fs-6 fw-bolder">Описание</th>
+                <th class="fs-6 fw-bolder">Цена</th>
+                <th class="fs-6 fw-bolder">Рейтинг</th>
+                <th class="fs-6 fw-bolder">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <th class="fw-normal">@product.Id</th>
+                    <th class="fw-normal">@product.Name</th>
+                    <th class="fw-normal">@product.Description</th>
+                    <th class="fw-normal">@product.Price</th>
+                    <th class="fw-normal">@product.Rating</th>
+                    <th>
+                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-outline-secondary btn-sm">Изменить</a>
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

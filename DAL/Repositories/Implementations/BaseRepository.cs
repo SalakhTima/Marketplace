@@ -34,21 +34,26 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "")
     {
-        IQueryable<TEntity> query = _context.Set<TEntity>();
+        IQueryable<TEntity> query = _context
+            .Set<TEntity>()
+            .AsNoTracking();
 
         if (filter != null)
         {
             query.Where(filter);
         }
-           
-        foreach (var includeProperty in includeProperties.Split(' '))
+          
+        if (!string.IsNullOrEmpty(includeProperties))
         {
-            query.Include(includeProperty);
+            foreach (var includeProperty in includeProperties.Split(','))
+            {
+                query = query.Include(includeProperty);
+            }
         }
 
         return orderBy == null ? 
             await query.ToListAsync() : 
-            orderBy.Invoke(query);
+            orderBy(query);
     }
         
 
