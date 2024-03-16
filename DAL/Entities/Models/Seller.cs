@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace DAL.Entities.Models;
 
-namespace DAL.Entities.Models;
-
-public class Seller
+public class Seller : BaseEntity
 {
-    [Key]
-    public int SellerId { get; set; }
-    public string? SellerName { get; set; } = null!;
-    public double? SellerRating { get; set; } = null!;
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public double Rating { get; set; }
+    public ICollection<Product>? Products { get; set; } = [];
 }

@@ -1,12 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace DAL.Entities.Models;
 
-namespace DAL.Entities.Models;
-
-public class Buyer
+public class Buyer : BaseEntity
 {
-    [Key]
-    public int BuyerId { get; set; }
-
-    [Required]
-    public string? BuyerName { get; set; } = null!;
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public Order? Order { get; set; }
 }

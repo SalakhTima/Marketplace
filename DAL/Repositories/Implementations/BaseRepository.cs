@@ -1,18 +1,22 @@
 ﻿using DAL.Entities.Contexts;
+using DAL.Entities.Models;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DAL.Repositories.Implementations;
 
-public class BaseRepository<TEntity> : IRepository<TEntity> 
-    where TEntity : class
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> 
+    where TEntity : BaseEntity
 {
-    protected readonly MarketplaceDbContext _context;
+    private readonly MarketplaceDbContext _context;
 
     public BaseRepository(MarketplaceDbContext context)
-        => _context = context;
+    {
+        _context = context; 
+    }
 
-    public async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity)
     {
         await _context.Set<TEntity>().AddAsync(entity);
         await _context.SaveChangesAsync();
@@ -20,17 +24,39 @@ public class BaseRepository<TEntity> : IRepository<TEntity>
 
     public virtual async Task DeleteAsync(int id)
     {
-        var entity = await _context.Set<TEntity>().FindAsync(id);
-        if (entity == null) return;
-        _context.Set<TEntity>().Remove(entity);
+        var entity = await GetByIdAsync(id);
+        _context.Set<TEntity>().Remove(entity!);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync() =>
-        await _context.Set<TEntity>().ToListAsync();
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
+        Expression<Func<TEntity, bool>>? filter = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        string includeProperties = "")
+    {
+        IQueryable<TEntity> query = _context.Set<TEntity>();
 
-    public virtual async Task<TEntity?> GetByIdAsync(int id) =>
-        await _context.Set<TEntity>().FindAsync(id);
+        if (filter != null)
+        {
+            query.Where(filter);
+        }
+           
+        foreach (var includeProperty in includeProperties.Split(' '))
+        {
+            query.Include(includeProperty);
+        }
+
+        return orderBy == null ? 
+            await query.ToListAsync() : 
+            orderBy.Invoke(query);
+    }
+        
+
+    public virtual async Task<TEntity?> GetByIdAsync(int id)
+    {
+        return await _context.Set<TEntity>()
+            .FindAsync(id);
+    }
 
     public virtual async Task UpdateAsync(TEntity entity)
     {

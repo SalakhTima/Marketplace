@@ -1,21 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace DAL.Entities.Models;
 
-namespace DAL.Entities.Models;
-
-public class Product
+public class Product : BaseEntity
 {
-    [Key]
-    public int ProductId { get; set; }
-
-    [Required]
-    public string? ProductName { get; set; } = null!;
-
-    [Required]
-    public string? ProductDescription { get; set; } = null!;
-
-    [Required]
-    public int? ProductPrice { get; set; } = null!;
-
-    [Required]
-    public double? ProductRating { get; set; } = null!;
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Price { get; set; }
+    public double Rating { get; set; }
+    public ICollection<Seller>? Sellers { get; set; } = [];
+    public ICollection<Order>? Orders { get; set; } = [];
 }

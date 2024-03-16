@@ -1,15 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace DAL.Entities.Models;
 
-namespace DAL.Entities.Models;
-
-public class Employee
+public class Employee : BaseEntity
 {
-    [Key]
-    public int EmployeeId { get; set; }
-
-    [Required]
-    public string EmployeeName { get; set; } = null!;
-
-    [Required]
-    public int? EmployeeSalary { get; set; } = null!;
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public int Salary { get; set; }
+    public PickupPoint? PickupPoint { get; set; }
 }

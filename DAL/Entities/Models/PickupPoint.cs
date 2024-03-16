@@ -1,16 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace DAL.Entities.Models;
 
-namespace DAL.Entities.Models;
-
-public class PickupPoint
+public class PickupPoint : BaseEntity
 {
-    [Key]
-    public int PickupPointId { get; set; }
-
-    [Required]
-    public string? PickupPointAddress { get; set; } = null!;
-
-    [Required]
-    public double? PickupPointRating { get; set; } = null!;
-    public int PickupPointEmployee { get; set; }
+    public int Id { get; set; }
+    public string Address { get; set; }
+    public double Rating { get; set; }
+    public int? EmployeeId { get; set; }
+    public Employee? Employee { get; set; }
+    public Order? Order { get; set; }    
 }
