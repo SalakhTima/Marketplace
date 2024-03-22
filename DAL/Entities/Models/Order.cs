@@ -1,7 +1,8 @@
 ﻿namespace DAL.Entities.Models;
 
-public class Order : BaseEntity
+public class Order
 {
+    public int Id { get; set; }
     public DateOnly CreationDate { get; set; }
     public DateOnly ReceivingDate { get; set; }
     public int? PickupPointId { get; set; }

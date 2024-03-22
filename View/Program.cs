@@ -1,10 +1,15 @@
+using DAL.Entities.Contexts;
+using DAL.Entities.Models;
+using DAL.Repositories.Implementations;
+using DAL.Repositories.Interfaces;
+
 var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddControllersWithViews();
-var app = builder.Build();
+builder.Services.AddDbContext<MarketplaceDbContext>();
+builder.Services.AddScoped<IBaseRepository<Product>, BaseRepository<Product>>();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Products}/{action=All}/{id?}");
+var app = builder.Build();
+app.MapControllers();
 
 app.Run();

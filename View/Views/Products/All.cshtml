@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="justify-content-start mb-4">
-        <a class="btn btn-primary" href="@Url.Action("Add", "Products")">Добавить</a>
+        <a class="btn btn-primary" asp-action="add">Добавить</a>
     </div>
 
     <table class="table table-bordered table-hover">
@@ -30,7 +30,10 @@
                     <th class="fw-normal">@product.Price</th>
                     <th class="fw-normal">@product.Rating</th>
                     <th>
-                        <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-outline-secondary btn-sm">Изменить</a>
+                        <a asp-action="edit" 
+                        asp-route-id="@product.Id"
+                        class="btn btn-outline-secondary
+                        btn-sm">Изменить</a>
                     </th>
                 </tr>
             }

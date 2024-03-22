@@ -1,73 +1,77 @@
-﻿using DAL.Repositories.Implementations;
-using Microsoft.AspNetCore.Mvc;
-using DAL.Entities.Contexts;
+﻿using Microsoft.AspNetCore.Mvc;
 using DAL.Entities.Models;
-using View.ViewModels;
+using View.DTOs;
+using DAL.Repositories.Interfaces;
 
-namespace View.Controllers
+namespace View.Controllers;
+
+[Route("/products")]
+public class ProductsController : Controller
 {
-    public class ProductsController : Controller
+    private readonly IBaseRepository<Product> _productRepository;
+
+    public ProductsController(IBaseRepository<Product> productRepository)
     {
-        private readonly UnitOfWork _unitOfWork = new();
+        _productRepository = productRepository;
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> All()
+    [HttpGet("all")]
+    public async Task<IActionResult> All()
+    {
+        var products = await _productRepository.GetAllAsync();
+        return View(products);
+    }
+
+    [Route("add")]
+    public IActionResult Add()
+    {
+        return View();  
+    }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> Add(ProductDto productDto)
+    { 
+        var product = new Product
         {
-            var products = await _unitOfWork.ProductRepository.GetAllAsync();
-            return View(products);
-        }
+            Name = productDto.Name,
+            Description = productDto.Description,
+            Price = productDto.Price,
+            Rating = productDto.Rating
+        };
 
-        public IActionResult Add()
-        {
-            return View();  
-        }
+        await _productRepository.AddAsync(product);
+        return RedirectToAction("all");
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(ProductVM productVM)
-        {
-            var product = new Product
-            {
-                Name = productVM.Name,
-                Description = productVM.Description,
-                Price = productVM.Price,
-                Rating = productVM.Rating
-            };
+    [HttpGet("edit/{id:int}")]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var product = await _productRepository
+            .GetByIdAsync(id);
+        return View(product);
+    }
 
-            await _unitOfWork.ProductRepository.AddAsync(product);
-            return RedirectToAction("All", "Products");
-        }
+    [HttpPost("edit/{id:int}")]
+    public async Task<IActionResult> Edit(Product product)
+    {
+        var toUpdate = await _productRepository
+            .GetByIdAsync(product.Id);
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var product = await _unitOfWork.ProductRepository
-                .GetByIdAsync(id);
-            return View(product);
-        }
+        toUpdate!.Name = product.Name;
+        toUpdate.Description = product.Description;
+        toUpdate.Price = product.Price;
+        toUpdate.Rating = product.Rating;
 
-        [HttpPost]  
-        public async Task<IActionResult> Edit(Product productVM)
-        {
-            var product = await _unitOfWork.ProductRepository
-                .GetByIdAsync(productVM.Id);
+        await _productRepository
+            .UpdateAsync(toUpdate);
 
-            product.Name = productVM.Name;
-            product.Description = productVM.Description;
-            product.Price = productVM.Price;
-            product.Rating = productVM.Rating;
+        return RedirectToAction("all");
+    }
 
-            await _unitOfWork.ProductRepository
-                .UpdateAsync(product);
-
-            return RedirectToAction("All", "Products");
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Product productVM)
-        {
-            await _unitOfWork.ProductRepository
-                .DeleteAsync(productVM.Id);
-            return RedirectToAction("All", "Products");
-        }
+    [HttpPost("delete/{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _productRepository.DeleteAsync(id);
+        return RedirectToAction("all");
     }
 }

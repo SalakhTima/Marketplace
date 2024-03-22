@@ -1,4 +1,4 @@
-﻿@model View.ViewModels.ProductVM
+﻿@model View.DTOs.ProductDto
 
 @{
     ViewBag.Title = "Добавить";
@@ -10,23 +10,31 @@
     <form method="post">
         <div class="mb-3">
             <label class="form-label">Название</label>
-            <input type="text" class="form-control" asp-for="Name">
+            <input type="text" class="form-control" asp-for="Name" >
+            <span asp-validation-for="Name" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Описание</label>
             <input type="text" class="form-control" asp-for="Description" >
+            <span asp-validation-for="Description" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Цена</label>
             <input type="text" class="form-control" asp-for="Price" >
+            <span asp-validation-for="Price" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Базовый рейтинг</label>
             <input type="text" class="form-control" asp-for="Rating" >
+            <span asp-validation-for="Rating" />
         </div>
         <button type="submit" class="btn btn-primary">Добавить</button>
     </form>
 </div>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>

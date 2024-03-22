@@ -4,13 +4,19 @@
     ViewBag.Title = "Изменить";
 }
 
+<style>
+    #id-section {
+        display: none;
+    }
+</style>
+
 <div class="container col-md-3 justify-content-center">
-    <h3 class="mb-4">Добавить товар</h3>
+    <h3 class="mb-4">Изменить товар</h3>
 
     <form method="post">
-        <div class="mb-3">
+        <div class="mb-3" id="id-section">
             <label class="form-label">Id</label>
-            <input type="text" class="form-control" asp-for="Id" readonly>
+            <input type="text" class="form-control" asp-for="Id" disabled>
         </div>
 
         <div class="mb-3">
@@ -32,7 +38,16 @@
             <label class="form-label">Базовый рейтинг</label>
             <input type="text" class="form-control" asp-for="Rating">
         </div>
-        <button type="submit" class="btn btn-primary">Применить</button>
-        <button type="submit" asp-controller="Products" asp-action="Delete" class="btn btn-danger">Удалить</button>
+
+        <button type="submit"
+                class="btn btn-primary"
+                asp-action="edit">Применить
+        </button>
+
+        <button type="submit" 
+                class="btn btn-danger" 
+                asp-action="delete"
+                asp-route-id="@Model.Id">Удалить
+        </button>
     </form>
 </div>

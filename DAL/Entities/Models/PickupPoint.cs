@@ -1,7 +1,8 @@
 ﻿namespace DAL.Entities.Models;
 
-public class PickupPoint : BaseEntity
+public class PickupPoint 
 {
+    public int Id { get; set; }
     public string Address { get; set; }
     public double Rating { get; set; }
     public int? EmployeeId { get; set; }
